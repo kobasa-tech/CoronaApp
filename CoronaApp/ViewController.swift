@@ -71,6 +71,26 @@ class ViewController: UIViewController {
         setUpLabel("重傷者数", size: size, centerX: rightX, y: 120, font: labelFont, color: color, contentView)
         setUpLabel("死者数", size: size, centerX: leftX, y: 220, font: labelFont, color: color, contentView)
         setUpLabel("退院者数", size: size, centerX: rightX, y: 220, font: labelFont, color: color, contentView)
+        
+        // ボタンの高さ配置に使用する。親をviewとしてyの値を設定する。
+        let height = view.frame.size.height / 2
+        setUpButton("健康管理", size: size, y: height + 190, color: colors.yellowOrange, parent: view)
+        setUpButton("県別状況", size: size, y: height + 240, color: colors.yellowOrange, parent: view)
+    }
+    
+    // ボタンの設定
+    func setUpButton(_ title: String, size: CGSize, y: CGFloat, color: UIColor, parent: UIView) {
+        let button = UIButton(type: .system) // .systemでタップすると光るなどボタンとしての機能を持たせる
+        button.setTitle(title, for: .normal) // .normalで通常のタイトルの状態を設定。他には.selectedなども
+        button.frame.size = size
+        button.center.x = view.center.x
+        
+        // NSAttributedStringは文字に装飾をするときに使う。文字間隔を設定した。
+        let attributedTitle = NSAttributedString(string: title, attributes: [NSAttributedString.Key.kern: 8.0])
+        button.setAttributedTitle(attributedTitle, for: .normal) // 通常状態のタイトルの装飾を設定
+        button.frame.origin.y = y
+        button.setTitleColor(color, for: .normal) // 通常状態のタイトルの色を設定
+        parent.addSubview(button)
     }
     
     // 文字の設定。テキストと親画面は引数で記述を省略できるようにしている。
