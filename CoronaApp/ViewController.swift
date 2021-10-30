@@ -82,8 +82,25 @@ class ViewController: UIViewController {
         自分自身が(self)タップされたときに(for: .touchDown)に処理を呼び出す(action: #selector(chatAction)) */
         setUpImageButton("chat", x: view.frame.size.width - 50).addTarget(self, action: #selector(chatAction), for: .touchDown)
         setUpImageButton("reload", x: 10).addTarget(self, action: #selector(reloadAction), for: .touchDown)
+        
+        // アニメーション画像の設定
+        let imageView = UIImageView()
+        let image = UIImage(named: "virus")
+        imageView.image = image // 画像を設定
+        imageView.frame = CGRect(x: view.frame.size.width, y: -65, width: 50, height: 50) // 画像の位置を画面外に指定
+        contentView.addSubview(imageView)
+        
+        /* アニメーションの設定
+         withDuration: アニメーション時間, delay: コードが読まれてからのタイムラグ, options: アニメーションスタイル, animations: アニメーションで表現する領域 */
+        UIView.animate(withDuration: 1.5, delay: 0.5, options: [.curveEaseIn], animations: {
+            // x: self.view.frame.size.width - 100で「画面外の画像を、画面幅-100の位置に0.5秒のタイムラグと1.5秒のアニメーションで移動」させる記述
+            imageView.frame = CGRect(x: self.view.frame.size.width - 100, y: -65, width: 50, height: 50)
+            //.transformプロパティで画像の変化を設定。90度の回転を指定している
+            imageView.transform = CGAffineTransform(rotationAngle: 90)
+        }, completion: nil)
     }
-    // チャットボタンの設定
+    
+    // 画像ボタンの設定
     func setUpImageButton(_ name: String, x: CGFloat) -> UIButton {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: name), for: .normal) // 画像名を引数から取得
@@ -107,7 +124,7 @@ class ViewController: UIViewController {
     }
     
     
-    // ボタンの設定
+    // 健康管理・県別状況ボタンの設定
     func setUpButton(_ title: String, size: CGSize, y: CGFloat, color: UIColor, parent: UIView) {
         let button = UIButton(type: .system) // .systemでタップすると光るなどボタンとしての機能を持たせる
         button.setTitle(title, for: .normal) // .normalで通常のタイトルの状態を設定。他には.selectedなども
