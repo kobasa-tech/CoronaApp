@@ -48,6 +48,40 @@ class ViewController: UIViewController {
         contentView.layer.shadowColor = UIColor.gray.cgColor
         contentView.layer.shadowOpacity = 0.5
         view.addSubview(contentView)
+        
+        /* contentViewよりも下方向の画面の背景色を変更。上方向はグラデーションのまま。
+        →背景色がグレーに変更されず、下方向がグラデーションのままになっている。別の記述が必要? */
+        view.backgroundColor = .systemGray6
+        
+        // 表示する文字の設定。
+        let labelFont = UIFont.systemFont(ofSize: 15, weight: .heavy)
+        // 文字を入れる箱の設定
+        let size = CGSize(width: 150, height: 50)
+        let color = colors.bluePurple
+        let leftX = view.frame.size.width * 0.33
+        let rightX = view.frame.size.width * 0.80
+        
+        // 上記の設定で文字を配置している。
+        setUpLabel("PCR数", size: size, centerX: leftX, y: 20, font: labelFont, color: color, contentView)
+        setUpLabel("感染者数", size: size, centerX: rightX, y: 20, font: labelFont, color: color, contentView)
+        setUpLabel("入院者数", size: size, centerX: leftX, y: 120, font: labelFont, color: color, contentView)
+        setUpLabel("重傷者数", size: size, centerX: rightX, y: 120, font: labelFont, color: color, contentView)
+        setUpLabel("死者数", size: size, centerX: leftX, y: 220, font: labelFont, color: color, contentView)
+        setUpLabel("退院者数", size: size, centerX: rightX, y: 220, font: labelFont, color: color, contentView)
+    }
+    
+    // 文字の設定。テキストと親画面は引数で記述を省略できるようにしている。
+    func setUpLabel(_ text: String, size: CGSize, centerX: CGFloat, y: CGFloat, font: UIFont, color: UIColor, _ parentView: UIView ) {
+        let label = UILabel()
+        label.text = text
+        label.frame.size = size
+        // 文字を入れる箱の中心を設定。文字は初期値が左寄りなので文字数が違っても揃って見える
+        label.center.x = centerX
+        // インスタンスの起点(左上)の場所を指定
+        label.frame.origin.y = y
+        label.font = font
+        label.textColor = color
+        parentView.addSubview(label)
     }
 }
 
