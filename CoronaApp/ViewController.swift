@@ -76,7 +76,36 @@ class ViewController: UIViewController {
         let height = view.frame.size.height / 2
         setUpButton("健康管理", size: size, y: height + 190, color: colors.yellowOrange, parent: view)
         setUpButton("県別状況", size: size, y: height + 240, color: colors.yellowOrange, parent: view)
+        
+        /* 表示する画像の名前と位置を引数にしている。
+        引数でUIButtonが返されているので、ボタンのように.addTargetを使用できる。
+        自分自身が(self)タップされたときに(for: .touchDown)に処理を呼び出す(action: #selector(chatAction)) */
+        setUpImageButton("chat", x: view.frame.size.width - 50).addTarget(self, action: #selector(chatAction), for: .touchDown)
+        setUpImageButton("reload", x: 10).addTarget(self, action: #selector(reloadAction), for: .touchDown)
     }
+    // チャットボタンの設定
+    func setUpImageButton(_ name: String, x: CGFloat) -> UIButton {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(named: name), for: .normal) // 画像名を引数から取得
+        button.frame.size = CGSize(width: 30, height: 30)
+        button.tintColor = .white // 画像の色を変更
+        button.frame.origin = CGPoint(x: x, y: 25)
+        view.addSubview(button)
+        return button
+    }
+    
+    // リロードボタンが押されたときの処理。画面を更新している
+    @objc func reloadAction() {
+        print("リロード")
+        loadView()
+        viewDidLoad()
+    }
+    
+    // チャットボタンが押されたときの処理
+    @objc func chatAction() {
+        print("タップchat")
+    }
+    
     
     // ボタンの設定
     func setUpButton(_ title: String, size: CGSize, y: CGFloat, color: UIColor, parent: UIView) {
