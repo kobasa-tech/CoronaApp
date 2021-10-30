@@ -61,7 +61,10 @@ class ViewController: UIViewController {
         let leftX = view.frame.size.width * 0.33
         let rightX = view.frame.size.width * 0.80
         
-        // 上記の設定で文字を配置している。
+        // タイトルを設定。viewの上に配置されるが起点はcontentViewになっている。
+        setUpLabel("Covid in Japan", size: CGSize(width: 180, height: 35), centerX: view.center.x - 20, y: -60,
+                   font: .systemFont(ofSize: 25, weight: .heavy), color: .white, contentView)
+        // 上記の設定で項目名を配置している。
         setUpLabel("PCR数", size: size, centerX: leftX, y: 20, font: labelFont, color: color, contentView)
         setUpLabel("感染者数", size: size, centerX: rightX, y: 20, font: labelFont, color: color, contentView)
         setUpLabel("入院者数", size: size, centerX: leftX, y: 120, font: labelFont, color: color, contentView)
