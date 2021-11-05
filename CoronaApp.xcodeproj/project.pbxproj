@@ -14,6 +14,7 @@
 		0B7B5F27272CDD46004BB227 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0B7B5F26272CDD46004BB227 /* Assets.xcassets */; };
 		0B7B5F2A272CDD46004BB227 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0B7B5F28272CDD46004BB227 /* LaunchScreen.storyboard */; };
 		0B7B5F32272CE162004BB227 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7B5F31272CE162004BB227 /* Colors.swift */; };
+		0B7B8BF82735424D00A746A7 /* HealthCheckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7B8BF72735424D00A746A7 /* HealthCheckViewController.swift */; };
 		4A77527847D64D6B34A2B7D4 /* Pods_CoronaApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9644B2E33011B5DF679310FF /* Pods_CoronaApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 		0B7B5F29272CDD46004BB227 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0B7B5F2B272CDD46004BB227 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0B7B5F31272CE162004BB227 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		0B7B8BF72735424D00A746A7 /* HealthCheckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthCheckViewController.swift; sourceTree = "<group>"; };
 		9644B2E33011B5DF679310FF /* Pods_CoronaApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CoronaApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5108972D59321FCE85F3D6C /* Pods-CoronaApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoronaApp.debug.xcconfig"; path = "Target Support Files/Pods-CoronaApp/Pods-CoronaApp.debug.xcconfig"; sourceTree = "<group>"; };
 		AF8F28137B83645B5E6853A0 /* Pods-CoronaApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoronaApp.release.xcconfig"; path = "Target Support Files/Pods-CoronaApp/Pods-CoronaApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -50,7 +52,6 @@
 				A5108972D59321FCE85F3D6C /* Pods-CoronaApp.debug.xcconfig */,
 				AF8F28137B83645B5E6853A0 /* Pods-CoronaApp.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -80,6 +81,7 @@
 				0B7B5F21272CDD45004BB227 /* ViewController.swift */,
 				0B7B5F31272CE162004BB227 /* Colors.swift */,
 				0B7B5F23272CDD45004BB227 /* Main.storyboard */,
+				0B7B8BF72735424D00A746A7 /* HealthCheckViewController.swift */,
 				0B7B5F26272CDD46004BB227 /* Assets.xcassets */,
 				0B7B5F28272CDD46004BB227 /* LaunchScreen.storyboard */,
 				0B7B5F2B272CDD46004BB227 /* Info.plist */,
@@ -210,6 +212,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B7B8BF82735424D00A746A7 /* HealthCheckViewController.swift in Sources */,
 				0B7B5F22272CDD45004BB227 /* ViewController.swift in Sources */,
 				0B7B5F32272CE162004BB227 /* Colors.swift in Sources */,
 				0B7B5F1E272CDD45004BB227 /* AppDelegate.swift in Sources */,

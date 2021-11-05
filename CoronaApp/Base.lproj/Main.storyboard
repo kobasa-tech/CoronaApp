@@ -18,10 +18,29 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <connections>
+                        <segue destination="tfI-Qf-usR" kind="show" identifier="goHealthCheck" id="aHh-DZ-BWr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="132" y="70"/>
+        </scene>
+        <!--Health Check View Controller-->
+        <scene sceneID="w2O-2b-gAO">
+            <objects>
+                <viewController id="tfI-Qf-usR" customClass="HealthCheckViewController" customModule="CoronaApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="qJE-wY-cc8">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="1kr-ck-pel"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="sfc-ZL-daS"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tzt-8y-Zwl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="854" y="70"/>
         </scene>
     </scenes>
     <resources>
