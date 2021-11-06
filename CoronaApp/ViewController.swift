@@ -73,8 +73,9 @@ class ViewController: UIViewController {
         setUpLabel("退院者数", size: size, centerX: rightX, y: 220, font: labelFont, color: color, contentView)
         
         // ボタンの高さ配置に使用する。親をviewとしてyの値を設定する。
+        // .addTarget以降でボタンの機能を追加。タップされた時に関数goHealthCheckを呼び出す
         let height = view.frame.size.height / 2
-        setUpButton("健康管理", size: size, y: height + 190, color: colors.yellowOrange, parent: view)
+        setUpButton("健康管理", size: size, y: height + 190, color: colors.yellowOrange, parent: view).addTarget(self, action: #selector(goHealthCheck), for: .touchDown)
         setUpButton("県別状況", size: size, y: height + 240, color: colors.yellowOrange, parent: view)
         
         /* 表示する画像の名前と位置を引数にしている。
@@ -123,9 +124,13 @@ class ViewController: UIViewController {
         print("タップchat")
     }
     
+    // 健康管理ボタンをタップされると呼び出される。goHealthCheckへ遷移する処理
+    @objc func goHealthCheck(){
+            performSegue(withIdentifier: "goHealthCheck", sender: nil)
+    }
     
     // 健康管理・県別状況ボタンの設定
-    func setUpButton(_ title: String, size: CGSize, y: CGFloat, color: UIColor, parent: UIView) {
+    func setUpButton(_ title: String, size: CGSize, y: CGFloat, color: UIColor, parent: UIView) -> UIButton {
         let button = UIButton(type: .system) // .systemでタップすると光るなどボタンとしての機能を持たせる
         button.setTitle(title, for: .normal) // .normalで通常のタイトルの状態を設定。他には.selectedなども
         button.frame.size = size
@@ -137,6 +142,7 @@ class ViewController: UIViewController {
         button.frame.origin.y = y
         button.setTitleColor(color, for: .normal) // 通常状態のタイトルの色を設定
         parent.addSubview(button)
+        return button
     }
     
     // 文字の設定。テキストと親画面は引数で記述を省略できるようにしている。
