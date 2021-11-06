@@ -40,6 +40,7 @@ class HealthCheckViewController: UIViewController {
         calendar.appearance.weekdayTextColor = colors.blue
         // FSCalendarのdelegateに自信を代入して登録された関数と紐付けを行う
         calendar.delegate = self
+        calendar.dataSource = self
         
         let checkLabel = UILabel()
         checkLabel.text = "健康チェック"
@@ -89,6 +90,15 @@ class HealthCheckViewController: UIViewController {
         // 一度押したらボタンの内側でも外側でも発火するようにしている
         resultButton.addTarget(self, action: #selector(resultButtonAction), for: [.touchUpInside, .touchUpOutside])
         scrollView.addSubview(resultButton)
+        
+        /* 本日診断済みかを判定するロジック。保存したキーはstring型。今日の日付をキーとして検索し、ヒットするものがあるか確認する。
+         今日診断しても次の日になれば昨日の日付となるため診断が可能になる */
+        if UserDefaults.standard.string(forKey: today) != nil {
+            resultButton.isEnabled = false // ボタンを押せなくする記述
+            resultButton.setTitle("診断済み", for: .normal)
+            resultButton.backgroundColor = .white
+            resultButton.setTitleColor(.gray, for: .normal)
+        }
     }
     
     // 体調チェック部分の土台を作成するメソッド
@@ -165,8 +175,10 @@ class HealthCheckViewController: UIViewController {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     // 2秒後の処理を記述。dismissで表示を消している。クロージャ内なのでself付き
                     self.dismiss(animated: true, completion: nil)
-            }
+                }
             })
+            // 診断結果をローカルに保存。保存したデータを探すときは第二引数のforKeyを検索して第一引数の値を参照する
+            UserDefaults.standard.set(resultTitle, forKey: self.today)
         })
         // キャンセルアクションの記述。style: .destructiveで赤いボタン。アラート画面を閉じるだけなのでhandler: nil
         let noAction = UIAlertAction(title: "キャンセル", style: .destructive, handler: nil)
@@ -219,6 +231,19 @@ extension HealthCheckViewController: FSCalendarDataSource, FSCalendarDelegate, F
             return UIColor(red: 150/255, green: 30/255, blue: 0/255, alpha: 0.9)
         }
         return colors.black // それ以外の曜日の文字色
+    }
+    // 診断結果(サブタイトル)を表示する部分
+    func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
+        /* 値が存在するかわからないオプショナルが値を持っていた場合に処理される。暗黙的にアンラップされてresultに代入されている
+         カレンダーの各日付(本日ではない)をキーにして診断結果が存在すればresultに代入される。 */
+        if let result = UserDefaults.standard.string(forKey: dateFormatter(day: date)) {
+            return result
+        }
+        return ""
+    }
+    // 診断結果の文字色の設定
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, subtitleDefaultColorFor date: Date) -> UIColor? {
+        return .init(red: 0, green: 0, blue: 0, alpha: 0.7)
     }
     
     // ロジックのための自作関数
