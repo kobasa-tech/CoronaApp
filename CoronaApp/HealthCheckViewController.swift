@@ -12,12 +12,15 @@ import CalculateCalendarLogic // 日本の祝日判定をBool型で返してく�
 class HealthCheckViewController: UIViewController {
     
     let colors = Colors()
+    var point = 0
+    var today = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         view.backgroundColor = .systemGroupedBackground
+        today = dateFormatter(day: Date()) // 今日の日付のフォーマットを変換して取得
         
         // スクロールビューを作成
         let  scrollView = UIScrollView()
@@ -127,14 +130,51 @@ class HealthCheckViewController: UIViewController {
     @objc func switchAction(sender: UISwitch) {
         // onかoffで処理が変わる。isOnメソッドによりonならtrue、offならfalseを受け取る。
         if sender.isOn {
-            print("on")
+            point += 1
         } else {
-            print("off")
+            point -= 1
         }
+        print("point:\(point)")
     }
     // 診断完了ボタンを押したときの処理
     @objc func resultButtonAction() {
-        print("resultButtonTapped")
+        /* アラートを出す。UIAlertControllerがベースになる。タイトルとメッセージを表示。
+        preferredStyleでアラートの出現方法を設定。.actionSheetで画面下部。.alertで画面中央 */
+        let alert = UIAlertController(title: "診断を完了しますか", message: "診断は1日に1回までです", preferredStyle: .actionSheet)
+        /* 完了アクションの記述。style: .defaultで青いボタン。完了ボタンを押した後の処理をhandler以降に記述。
+         handler: { action in この記述方法をクロージャと言い、クロージャ内では外部からの参照にはselfをつける */
+        let yesAction = UIAlertAction(title: "完了", style: .default, handler: { action in
+            // ポイントによって表示するタイトルとメッセージを変化させる
+            var resultTitle = ""
+            var resultMessage = ""
+            if self.point >= 4 {
+                resultTitle = "高"
+                resultMessage = "感染している可能性が\n比較的高いです。\nPCR検査をしましょう。"
+            } else if self.point >= 2 {
+                resultTitle = "中"
+                resultMessage = "やや感染している可能性が\nあります。外出は控えましょう。"
+            } else {
+                resultTitle = "低"
+                resultMessage = "感染している可能性は\n今のところ低いです。\n今後も気をつけましょう。"
+            }
+            // preferredStyle: .alertで画面中央にアラートを表示
+            let alert = UIAlertController(title: "感染している可能性「\(resultTitle)」", message: resultMessage, preferredStyle: .alert)
+            self.present(alert, animated: true, completion: {
+                /* DispatchQueueは本来自動で割り当てられるスレッドを手動で操作するもの。スレッドの切り替えや遅延処理に使用する。
+                 2秒後にアラートが消える記述*/
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    // 2秒後の処理を記述。dismissで表示を消している。クロージャ内なのでself付き
+                    self.dismiss(animated: true, completion: nil)
+            }
+            })
+        })
+        // キャンセルアクションの記述。style: .destructiveで赤いボタン。アラート画面を閉じるだけなのでhandler: nil
+        let noAction = UIAlertAction(title: "キャンセル", style: .destructive, handler: nil)
+        // 完了アクションとキャンセルアクションをコントローラーに追加する
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        // アラートを表示する処理。第一引数に表示するアラート、第二引数にアニメーション表示の有無、第三引数に表示した後の処理
+        present(alert, animated: true, completion: nil)
     }
 
     /*
@@ -156,8 +196,8 @@ extension HealthCheckViewController: FSCalendarDataSource, FSCalendarDelegate, F
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, borderDefaultColorFor date: Date) -> UIColor? {
         /* 今日の日付マスの枠線の色を変更
          左辺の引数dateはFSCalendarの関数から渡され、表示する月の日数+aの数だけ呼ばれる。
-         右辺の引数Date()でインスタンスを生成すると今日の日付が生成される */
-        if dateFormatter(day: date) == dateFormatter(day: Date()) {
+         右辺の引数Date()でインスタンスを生成すると今日の日付が生成される->変数todayで設定している */
+        if dateFormatter(day: date) == today {
             return colors.bluePurple
         }
         // if Calendar.current.isDateInToday(date){return colors.bluePurple}でも同じ結果
