@@ -7,6 +7,7 @@
 
 import UIKit
 import FSCalendar
+import CalculateCalendarLogic // 日本の祝日判定をBool型で返してくれるメソッドがある
 
 class HealthCheckViewController: UIViewController {
     
@@ -26,10 +27,16 @@ class HealthCheckViewController: UIViewController {
         scrollView.contentSize = CGSize(width: view.frame.size.width, height: 950)
         view.addSubview(scrollView)
         
-        // カレンダーの位置とサイズを設定
+        // カレンダーの設定
         let calendar = FSCalendar()
         calendar.frame = CGRect(x: 20, y: 10, width: view.frame.size.width - 40, height: 300)
         scrollView.addSubview(calendar)
+        // カレンダーの月の色を設定
+        calendar.appearance.headerTitleColor = colors.blue
+        // カレンダーの週の色を設定
+        calendar.appearance.weekdayTextColor = colors.blue
+        // FSCalendarのdelegateに自信を代入して登録された関数と紐付けを行う
+        calendar.delegate = self
         
         let checkLabel = UILabel()
         checkLabel.text = "健康チェック"
@@ -139,5 +146,69 @@ class HealthCheckViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
 }
+
+// FSCalendarの日付部分の設定。Delegateを利用して設定する。extensionはクラスの外に書く！
+extension HealthCheckViewController: FSCalendarDataSource, FSCalendarDelegate, FSCalendarDelegateAppearance {
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor? {
+        return .clear // マスの色(背景色)
+    }
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, borderDefaultColorFor date: Date) -> UIColor? {
+        /* 今日の日付マスの枠線の色を変更
+         左辺の引数dateはFSCalendarの関数から渡され、表示する月の日数+aの数だけ呼ばれる。
+         右辺の引数Date()でインスタンスを生成すると今日の日付が生成される */
+        if dateFormatter(day: date) == dateFormatter(day: Date()) {
+            return colors.bluePurple
+        }
+        // if Calendar.current.isDateInToday(date){return colors.bluePurple}でも同じ結果
+        
+        return .clear
+    }
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, borderRadiusFor date: Date) -> CGFloat {
+        return 0.5 // 角丸の度合い
+    }
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        // 曜日によって文字色を変更
+        if judgeWeekday(date) == 1 { // 日曜日の場合
+            return UIColor(red: 150/255, green: 30/255, blue: 0/255, alpha: 0.9)
+        } else if judgeWeekday(date) == 7 { // 土曜日の場合
+            return UIColor(red: 0/255, green: 30/255, blue: 150/255, alpha: 0.9)
+        }
+        // 祝日なら(関数の返り値がtrue)文字色を変更
+        if judgeHoliday(date) {
+            return UIColor(red: 150/255, green: 30/255, blue: 0/255, alpha: 0.9)
+        }
+        return colors.black // それ以外の曜日の文字色
+    }
+    
+    // ロジックのための自作関数
+    func dateFormatter(day: Date) -> String {
+        let formatter = DateFormatter()
+        // 日付のフォーマットを変更している。変更しないと時間などが入ってしまい条件式に使いづらいため。MMは大文字にする必要がある
+        formatter.dateFormat = "yyyy-MM-dd"
+        // 引数で受け取った日付のフォーマットを変換して返している。
+        return formatter.string(from: day)
+    }
+
+    // 曜日判定(日曜日：1/土曜日：7)
+    func judgeWeekday(_ date: Date) -> Int {
+        // identifier: .gregorianを引数にしてカレンダーのインスタンスを作成できる。グレゴリオ歴という西暦の日付設定。
+        let calendar = Calendar(identifier: .gregorian)
+        // 第二引数の日付情報から第一引数で指定した情報を返してくれる(日曜日：1/土曜日：7)
+        return calendar.component(.weekday, from: date)
+    }
+    
+    // 祝日かどうかを判定する処理
+    func judgeHoliday(_ date: Date) -> Bool {
+        // Calendarインスタンスを生成してcomponentでInt型の年・月・日を取得
+        let calendar = Calendar(identifier: .gregorian)
+        let year = calendar.component(.year, from: date)
+        let month = calendar.component(.month, from: date)
+        let day = calendar.component(.day, from: date)
+        // judgeJapaneseHolidayメソッドに渡して祝日ならtrue、祝日でないならfalseを返す
+        let holiday = CalculateCalendarLogic()
+        let judgeHoliday = holiday.judgeJapaneseHoliday(year: year, month: month, day: day)
+        return judgeHoliday
+    }
+}
+
